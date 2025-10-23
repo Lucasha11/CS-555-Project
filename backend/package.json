@@ -1,0 +1,17 @@
+{
+  "name": "lab6_stub",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.8.4",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2"
+  }
+}
