@@ -27,13 +27,13 @@ export async function getDailyForecast(location) {
   const apikey = process.env.apikey;
 
 
-  const { data } = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=${apikey}`);
+  const { data } = await axios.get(`https://pro.openweathermap.org/data/2.5/forecast/hourly?q=${location}&appid=${apikey}`);
 
 
   const result = {}
 
 
-  for (let i = 0; i < 8; i++){
+  for (let i = 0; i < 24; i++){
     const time = unixToHHMM(data.list[i].dt);
     const temp = kelvinToFahrenheit(data.list[i].main.temp)
     result[time] = Math.round(temp);
