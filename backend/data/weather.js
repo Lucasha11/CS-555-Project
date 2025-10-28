@@ -18,6 +18,16 @@ function kelvinToFahrenheit(kelvin) {
   return ((kelvin - 273.15) * 9/5) + 32;
 }
 
+/**
+ * Converts timestamp to day of the week.
+ * @param {number} timestamp 
+ * @returns {string} - Day of the week
+ */
+function getDayOfWeek(timestamp) {
+  const date = new Date(timestamp * 1000);
+  return date.toLocaleDateString('en-US', { weekday: 'long' });
+}
+
 
 export async function getDailyForecast(location) {
   if (!location || typeof location !== 'string'){
@@ -42,3 +52,50 @@ export async function getDailyForecast(location) {
 
   return result;
 };
+
+/**
+ * Fetches 10-day high/low temperature forecasts for a given location.
+ * @param {string} location 
+ * @returns {Array} - Object array of 10-day high/low temperature forecasts.
+ */
+export async function getTenDayForecast(location) {
+  if (!location || typeof location != 'string') {
+    throw new Error('Locaiton must be a valid string')
+  }
+
+  const apikey = process.env.apikey;
+
+  try {
+
+    const { data } = await axios.get(`https://api.openweathermap.org/data/2.5/forecast/daily?q=${location}&cnt=10&appid=${apikey}`)
+    
+    if(!data.list || data.list.length == 0) {
+      throw new Error('Data not available for this location')
+    }
+
+    const result = []
+
+    for (let i = 0; i < data.list.length; i++) {
+      const dayData = data.list[i];
+
+      const day = getDayOfWeek(dayData.dt);
+      const high = Math.round(kelvinToFahrenheit(dayData.temp.max));
+      const low = Math.round(kelvinToFahrenheit(dayData.temp.min));
+
+      result.push({
+        day: day,
+        high: high,
+        low: low
+      });
+    }
+
+    return result;
+  } catch (error) {
+    if (error.response && error.response.data) {
+      console.error('API Error:', error.response.data);
+    } else {
+      console.error('Error fetching forecast:', error.message);
+    }
+    throw new Error('Failed to fetch weather data.');
+  }
+}
