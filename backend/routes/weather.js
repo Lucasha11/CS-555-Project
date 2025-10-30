@@ -23,7 +23,7 @@ router
 router.get('/current', async (req, res) => {
   try {
     const { lat, lon } = req.query;
-    const data = await getCurrentWeather(lat, lon);
+    const data = await weatherData.getCurrentWeather(lat, lon);
     res.json(data);
   } catch (err) {
     res.status(400).json({ error: err.message });
