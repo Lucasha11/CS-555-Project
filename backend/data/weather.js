@@ -67,9 +67,7 @@ export async function getCurrentWeather(lat, lon) {
 
   const apikey = process.env.apikey;
 
-  const url = `https://pro.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apikey}`;
-
-  const { data } = await axios.get(url);
+  const { data } = await axios.get(`https://pro.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apikey}`);
 
   const locationName = `${data.name}, ${data.sys.country}`;
   const currentTemp = kelvinToFahrenheit(data.main.temp);

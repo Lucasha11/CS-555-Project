@@ -30,4 +30,14 @@ router.get('/current', async (req, res) => {
   }
 });
 
+router.get('/geocode', async (req, res) => {
+  try {
+    const { city } = req.query;
+    const coords = await weatherData.getCoordinates(city);
+    res.json(coords);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 export default router;
