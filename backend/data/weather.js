@@ -18,6 +18,23 @@ function kelvinToFahrenheit(kelvin) {
   return ((kelvin - 273.15) * 9/5) + 32;
 }
 
+export async function getCoordinates(city) {
+  if (!city || typeof city !== 'string') {
+    throw new Error('City must be a valid string');
+  }
+
+  const apikey = process.env.apikey;
+  const url = `https://pro.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apikey}`;
+
+  const { data } = await axios.get(url);
+
+  if (!data || data.length === 0) {
+    throw new Error('Location not found');
+  }
+
+  const { lat, lon, name, country } = data[0];
+  return { lat, lon, name, country };
+}
 
 export async function getDailyForecast(location) {
   if (!location || typeof location !== 'string'){
@@ -42,3 +59,27 @@ export async function getDailyForecast(location) {
 
   return result;
 };
+
+export async function getCurrentWeather(lat, lon) {
+  if (!lat || !lon) {
+    throw new Error('Latitude and longitude are required');
+  }
+
+  const apikey = process.env.apikey;
+
+  const url = `https://pro.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apikey}`;
+
+  const { data } = await axios.get(url);
+
+  const locationName = `${data.name}, ${data.sys.country}`;
+  const currentTemp = kelvinToFahrenheit(data.main.temp);
+  const highTemp = kelvinToFahrenheit(data.main.temp_max);
+  const lowTemp = kelvinToFahrenheit(data.main.temp_min);
+
+  return {
+    location: locationName,
+    current: Math.round(currentTemp),
+    high: Math.round(highTemp),
+    low: Math.round(lowTemp),
+  };
+}
