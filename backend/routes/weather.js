@@ -40,4 +40,25 @@ router.get('/geocode', async (req, res) => {
   }
 });
 
+router.get('/hourly', async (req, res) => {
+  try {
+      const location = req.query.location;
+
+      if (!location || typeof location !== 'string') {
+        throw new Error('Location must be a valid string');
+      }
+
+      const hourlyForecast = await weatherData.getHourlyForecast(location);
+
+      if (!hourlyForecast || hourlyForecast.length === 0) {
+        return res.status(404).send('Hourly forecast not available');
+      }
+
+      return res.json(hourlyForecast);
+      } catch (e) {
+      console.error(e);
+      return res.status(500).send(e.message);
+    }
+});
+
 export default router;

@@ -81,3 +81,28 @@ export async function getCurrentWeather(lat, lon) {
     low: Math.round(lowTemp),
   };
 }
+
+
+export async function getHourlyForecast(location) {
+  if (!location || typeof location !== 'string'){
+    throw new Error('Location must be a valid string');
+  }
+
+  const apikey = process.env.apikey;
+
+  try {
+    const { data } = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=${apikey}`);
+
+    const result = [];
+    for (let i = 0; i < 8; i++) {  
+      const time = unixToHHMM(data.list[i].dt);
+      const temp = kelvinToFahrenheit(data.list[i].main.temp);
+      result.push({ time, temp: Math.round(temp) }); 
+    }
+
+    return result; 
+  } catch (error) {
+    console.error('Error fetching hourly forecast:', error);
+    throw new Error('Failed to fetch hourly forecast');
+  }
+
