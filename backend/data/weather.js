@@ -106,3 +106,5 @@ export async function getHourlyForecast(location) {
     throw new Error('Failed to fetch hourly forecast');
   }
 
+}
+

@@ -5,9 +5,7 @@ import { weatherData } from '../data/index.js';
 
 
 
-router
-  .route('/forecast')
-  .get(async (req, res) => {
+router.get('/forecast', async (req, res) => {
     try {
       if (!req.body.location || typeof req.body.location !== 'string'){
         throw new Error('Location must be a valid string')
