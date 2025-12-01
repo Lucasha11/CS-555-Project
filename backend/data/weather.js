@@ -61,10 +61,6 @@ export async function getDailyForecast(location) {
 };
 
 
-
-  return result;
-};
-
 export async function getCurrentWeather(lat, lon) {
   if (!lat || !lon) {
     throw new Error('Latitude and longitude are required');
