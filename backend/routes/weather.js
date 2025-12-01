@@ -6,14 +6,14 @@ import { weatherData } from '../data/index.js';
 
 
 router
-  .route('/forecast')
+  .route('/forecast/:location')
   .get(async (req, res) => {
     try {
-      if (!req.body.location || typeof req.body.location !== 'string'){
-        throw new Error('Location must be a valid string')
-      }
-      const weatherList = await weatherData.getDailyForecast(req.body.location);
-      return res.json(weatherList);
+      console.log(req.params.location)
+
+      const weatherList = await weatherData.getDailyForecast(req.params.location);
+      console.log(weatherList)
+      return res.status(200).json(weatherList);
       } catch (e) {
       console.log(e);
       return res.status(500).send(e);
