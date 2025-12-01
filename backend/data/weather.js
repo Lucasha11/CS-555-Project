@@ -37,24 +37,29 @@ export async function getCoordinates(city) {
 }
 
 export async function getDailyForecast(location) {
-  if (!location || typeof location !== 'string'){
-    throw new Error('Location must be a valid string')
+  if (!location || typeof location !== 'string') {
+    throw new Error('Location must be a valid string');
   }
 
   const apikey = process.env.apikey;
 
-
   const { data } = await axios.get(`https://pro.openweathermap.org/data/2.5/forecast/hourly?q=${location}&appid=${apikey}`);
 
+  const result = [];
 
-  const result = {}
-
-
-  for (let i = 0; i < 24; i++){
+  for (let i = 0; i < 24; i++) {
     const time = unixToHHMM(data.list[i].dt);
-    const temp = kelvinToFahrenheit(data.list[i].main.temp)
-    result[time] = Math.round(temp);
+    const temp = kelvinToFahrenheit(data.list[i].main.temp);
+    
+    result.push({
+      time: time,
+      temperature: Math.round(temp)
+    });
   }
+
+  return result;
+};
+
 
 
   return result;
