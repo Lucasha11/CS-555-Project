@@ -23,6 +23,14 @@
 
 }
 
+.city-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+
 .forecast-item {
     background: #ffffff;
     border: 1px solid #e0e0e0;
